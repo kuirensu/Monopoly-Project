@@ -1,0 +1,217 @@
+package client;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import utilities.AppearanceSettings;
+
+public class LoginWindow extends JFrame {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3612046967469362741L;
+	
+	private JLabel alertLabel;
+	private JButton loginButton;
+	private JButton createAccountButton;
+	private JButton guestButton;
+	private JTextField username;
+	private JPasswordField password;
+	
+	public LoginWindow() {
+		initializeComponents();
+		createGUI();
+		addListeners();
+	}
+	
+	private void initializeComponents() {
+		alertLabel =new JLabel("");
+		loginButton = new JButton("Log In");
+		createAccountButton = new JButton("Create Account");
+		guestButton = new JButton("Play as Guest");
+		username = new JTextField("Username");
+		password = new JPasswordField("Password");
+		password.setEchoChar((char) 0);
+	}
+	
+	private void createGUI() {
+		//	create local variables
+		JPanel mainPanel= new JPanel();
+		JPanel usernamePanel = new JPanel();
+		JPanel passwordPanel = new JPanel();
+		JLabel monopolyLabel = new JLabel("Monopoly", JLabel.CENTER);
+		JPanel alertPanel = new JPanel();
+		JPanel textFieldsPanel = new JPanel();
+		JPanel buttonsPanel = new JPanel();
+		
+		//	make it pretty
+		AppearanceSettings.setSize(300, 60, password, username);
+		AppearanceSettings.setSize(120, 60, loginButton, createAccountButton, guestButton);
+		AppearanceSettings.setForeground(Color.LIGHT_GRAY, username, password);
+		
+		//	only guest button starts as enabled (and is always enabled)
+		loginButton.setEnabled(false);
+		createAccountButton.setEnabled(false);
+		
+		alertPanel.add(alertLabel);
+		usernamePanel.add(username);
+		passwordPanel.add(password);
+		
+		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.LINE_AXIS));
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+		
+		AppearanceSettings.addGlue(buttonsPanel, BoxLayout.LINE_AXIS, true, loginButton, createAccountButton, guestButton);
+		AppearanceSettings.addGlue(mainPanel, BoxLayout.PAGE_AXIS, false, monopolyLabel);
+		
+		mainPanel.add(alertPanel);
+		mainPanel.add(usernamePanel);
+		AppearanceSettings.addGlue(mainPanel, BoxLayout.PAGE_AXIS, false, passwordPanel);
+		mainPanel.add(buttonsPanel);
+		
+		add(mainPanel, BorderLayout.CENTER);
+		
+		setSize(600, 600);
+		setLocationRelativeTo(null);
+	}
+	
+	private void addListeners() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		//	listeners to enable/disable login and create account buttons
+		username.getDocument().addDocumentListener(new MyDocumentListener());
+		password.getDocument().addDocumentListener(new MyDocumentListener());
+		
+		//	add button action listeners
+		loginButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				//login(username.getText(), new String(password.getPassword()));
+			}
+		});
+		
+		createAccountButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				//createAccount(username.getText(), new String(password.getPassword()));
+			}
+		});
+		
+		guestButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				//playAsGuest();
+			}
+		});
+		
+		//	change username text field to allow grey prompt text to appear/disappear
+		username.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (username.getText().equals("")) {
+					username.setText("Username");
+					username.setForeground(Color.LIGHT_GRAY);
+					loginButton.setEnabled(false);
+					createAccountButton.setEnabled(false);
+				}
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (username.getForeground().equals(Color.LIGHT_GRAY)) {
+					username.setText("");
+					username.setForeground(Color.BLACK);
+				}
+			}
+		});
+		
+		//	change password field to allow grey prompt text to appear/disappear
+		password.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (password.getPassword().length == 0) {
+					password.setEchoChar((char) 0);
+					password.setText("Password");
+					password.setForeground(Color.LIGHT_GRAY);
+					loginButton.setEnabled(false);
+					createAccountButton.setEnabled(false);
+				}
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (password.getForeground().equals(Color.LIGHT_GRAY)) {
+					// This line was causing issue on my computer as an illegal character
+					// - Jesse
+					//password.setEchoChar('a');
+					password.setText("");
+					password.setForeground(Color.BLACK);
+				}
+			}
+		});
+	}
+	
+	private boolean haveText() {
+		//	returns true if the username and password fields both contain non-prompt text
+		//	false if empty or grey prompt text
+		boolean haveText = true;
+		
+		if (username.getText().trim().equals("") || password.getPassword().length == 0){
+			haveText = false;
+		}
+		if (username.getForeground().equals(Color.LIGHT_GRAY) 
+				|| password.getForeground().equals(Color.LIGHT_GRAY)) {
+			haveText = false;
+		}
+		
+		return haveText;
+	}
+	
+	private void login() {
+		
+	}
+	
+	private void createAccount() {
+		
+	}
+	
+	private void playAsGuest() {
+		
+	}
+	
+	private class MyDocumentListener implements DocumentListener {
+		//	custom DocumentListener from solution code
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			loginButton.setEnabled(haveText());
+			createAccountButton.setEnabled(haveText());
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			loginButton.setEnabled(haveText());
+			createAccountButton.setEnabled(haveText());
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			loginButton.setEnabled(haveText());
+			createAccountButton.setEnabled(haveText());
+		}
+		
+	}
+}

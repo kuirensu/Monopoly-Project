@@ -1,0 +1,10 @@
+package client;
+
+import javax.swing.JFrame;
+
+public class MainBoard extends JFrame {
+
+	private static final long serialVersionUID = 424155134277101665L;
+
+	private ArrayList<Player> mPlayers;
+}

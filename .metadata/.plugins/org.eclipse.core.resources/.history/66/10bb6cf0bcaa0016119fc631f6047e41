@@ -1,0 +1,22 @@
+package client;
+
+import java.util.ArrayList;
+
+import javax.swing.JFrame;
+
+import resources.Player;
+
+public class MainBoard extends JFrame {
+
+	private static final long serialVersionUID = 424155134277101665L;
+
+	private ArrayList<Player> mPlayers;
+	private int currentPlayer;
+	private int ownedPlayer;
+	
+	private JButton rollButton;
+	private JButton manageBuildingsButton;
+	private JButton managePropertiesButton;
+	private JButton endTurnButton;
+	private JButton exitButton;
+}

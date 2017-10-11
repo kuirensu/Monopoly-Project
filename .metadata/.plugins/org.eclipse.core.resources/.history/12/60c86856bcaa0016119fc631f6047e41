@@ -1,0 +1,9 @@
+package main;
+
+import client.LoginWindow;;
+
+public class main {
+	public static void main (String [] args){
+		new LoginWindow().setVisible(true);
+	}
+}

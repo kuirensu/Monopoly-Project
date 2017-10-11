@@ -1,0 +1,29 @@
+package client;
+
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import resources.Player;
+
+public class MainWindow extends JFrame {
+
+	private static final long serialVersionUID = 424155134277101665L;
+
+	private ArrayList<Player> mPlayers;
+	private int currentPlayer;
+	private int ownedPlayer;
+	
+	// Control Buttons
+	private JButton rollButton;
+	private JButton manageBuildingsButton;
+	private JButton managePropertiesButton;
+	private JButton endTurnButton;
+	private JButton exitButton;
+	
+	// Other Custom Objects For GUI
+	private ProgressArea progressArea;
+	private PlayerInformationGrid playerInformationGrid;
+	private GameBoard gameBoard;
+}
